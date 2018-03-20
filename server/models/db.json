@@ -1,0 +1,39 @@
+{
+    "todos": [
+      {
+        "id": 1,
+        "name": "configure server",
+        "isComplete": false
+      },
+      {
+        "id": 3,
+        "name": "Load data into app",
+        "isComplete": true
+      },
+      {
+        "id": 4,
+        "name": "Add records",
+        "isComplete": true
+      },
+      {
+        "id": 5,
+        "name": "update records",
+        "isComplete": false
+      },
+      {
+        "name": "Final test",
+        "isComplete": false,
+        "id": 7
+      },
+      {
+        "name": "My todo",
+        "isComplete": true,
+        "id": 8
+      },
+      {
+        "name": "Morning Todo",
+        "isComplete": true,
+        "id": 9
+      }
+    ]
+  }
