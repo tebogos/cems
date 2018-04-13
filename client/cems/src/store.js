@@ -1,17 +1,46 @@
-import {createStore, applyMiddleware, combineReducers} from 'redux'
-import {composeWithDevTools} from 'redux-devtools-extension'
-import thunk from 'redux-thunk'
-import todoReducer from './reducers/todo'
-import messageReducer from './reducers/messages'
+import {createStore, applyMiddleware, combineReducers} from 'redux';
+import {composeWithDevTools} from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+import todoReducer from './reducers/todo';
+import messageReducer from './reducers/messages';
+import loginReducer from './reducers/login';
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web and AsyncStorage for react-native
+import createHistory from 'history/createBrowserHistory'
 
+import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
+
+const history = createHistory()
+
+// Build the middleware for intercepting and dispatching navigation actions
+const middleware = routerMiddleware(history)
+
+const persistConfig = {
+  key: 'root',
+  storage,
+}
 const reducer = combineReducers({
   todo: todoReducer,
-  message: messageReducer
+  message: messageReducer,
+  login:loginReducer,
+  router: routerReducer
 })
+const persistedReducer = persistReducer(persistConfig, reducer);
 
-export default createStore(
-  reducer,
-  composeWithDevTools(
-    applyMiddleware(thunk)
+
+export default () => {
+  let store = createStore(
+    persistedReducer,
+    composeWithDevTools(
+      applyMiddleware(thunk,middleware)
+    )
   )
-)
+  let persistor = persistStore(store)
+  return { store, persistor }
+}
+
+
+
+
+
+

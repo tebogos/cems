@@ -1,0 +1,42 @@
+// Here you can add other styles
+
+.btn-icon{border: 0;
+     background: none;
+    }
+
+    .fancy-checkbox input[type="checkbox"],
+.fancy-checkbox .checked {
+    display: none;
+}
+ 
+.fancy-checkbox input[type="checkbox"]:checked ~ .checked
+{
+    display: inline-block;
+}
+ 
+.fancy-checkbox input[type="checkbox"]:checked ~ .unchecked
+{
+    display: none;
+}
+
+.checked-icon{
+    color:green;
+}
+.trash-icon{
+    color:red;
+}
+.list-items-space{
+margin-left: 10px;
+margin-right: 10px;
+}
+.link-space{
+    margin-left: 2px;
+    margin-right: 2px;
+    }
+.assignmentForm{
+   top: -20px;
+   
+}
+.select-input{
+    width:20px;
+}

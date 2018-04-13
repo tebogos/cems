@@ -15,9 +15,13 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
+    "camunda-bpm-sdk-js": "git://github.com/camunda/camunda-bpm-sdk-js.git",
+    "cli-table": "^0.3.1",
+    "cors": "^2.8.4",
     "cross-env": "^5.0.5",
     "express": "^4.15.3",
     "express-promise-router": "^2.0.0",
+    "inquirer": "^5.2.0",
     "joi": "^10.6.0",
     "jsonwebtoken": "^7.4.1",
     "mongoose": "^4.11.3",

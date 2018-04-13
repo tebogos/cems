@@ -21,39 +21,65 @@ module.exports = {
       const {name,isComplete } = req.body;
      console.log("in save task post controller");
      
-      // Check if there is a user with the same email
-      const foundTask = await Tasks.findOne({ "name": name });
-      if (foundTask) {
-        console.log("if it exist");
-        return res.status(403).json({ error: 'Task is already in the list'});
-      }
+      // // Check if there is a user with the same email
+      // const foundTask = await Tasks.findOne({ "name": name });
+      // if (foundTask) {
+      //   console.log("if it exist");
+      //   return res.status(403).json({ error: 'Task is already in the list'});
+      // }
      const newId=new mongoose.mongo.ObjectId();
      console.log("newId -->:",newId);
      
       // Create a new user
       const newTask = new Tasks({
-        id:newId,
+        _id:newId,
         name: name,
         isComplete: isComplete
       });
       console.log("saving task");
-      await newTask.save();
-      console.log("task saved");
+      const tsk=await newTask.save();
+      console.log("task saved --> ",tsk);
       // // Generate the token
       // const token = signToken(newUser);
       // Respond with token
-      res.status(200);
+      res.json(tsk);
     },
     updateTask: async (req, res, next) => {
-      const isComplete = req.body.isComplete;
       const id=req.params.id;
      console.log("in update task post controller and id is : ",id);
-     console.log("isComplete is : ",isComplete);
+    //  console.log("isComplete is : ",isComplete);
+     
+     let isComplete;
+     Tasks.findOne({_id:id},(err,task)=>{             
+        isComplete=task.isComplete
+        console.log("isComplete ::--::",isComplete);
+        Tasks.findOneAndUpdate({_id:id},{$set:{isComplete:!isComplete}},{new:true},(err,task)=>{
+          if(err)
+           res.send('record uddated')
+           else
+          {
+            console.log(task);
+             res.json(task);
+           }
+        })
+    
+    
+    }
+    
+    );
+     
+     
+     
+        
+    },
+    deleteTask: async (req, res, next) => {
+      const id=req.params.id;
+     console.log("in Delete task post controller and id is : ",id);
      
       
-     Tasks.findOneAndUpdate({id:id},{$set:{isComplete}},{upsert:true},(err,task)=>{
+     Tasks.findByIdAndRemove({id:id},(err,task)=>{
        if(err)
-        res(err)
+        res.send('record deleted')
         else
         res.status(200);
      })

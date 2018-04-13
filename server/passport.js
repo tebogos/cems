@@ -47,11 +47,12 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
     console.log("existingUser : ",existingUser);
     if (existingUser) {
       if(existingUser.google.google_id){
-        const valid= profile.id===existingUser.google.google_id?true:false;
-        console.log("valid---> : ",valid);
-        if(valid)
+        const validUser= profile.id===existingUser.google.google_id?true:false;
+        console.log("valid---> : ",validUser);
+        if(validUser){
            return done(null, existingUser);
-          done(error, false, "Please ask the admin for help");
+          }
+        return  done(error, false, "Please ask the admin for help");
 
        }
          else{
@@ -75,16 +76,17 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
       // console.log("User dose not exist :",profile.emails[0].value);
       
       // done(error, false, "Please ask the admin for help");
-      User.update({ "google.email": profile.emails[0].value },{
-        $set:{'google.google_id':profile.id}
-      },function(err,numAffect){
-        if (err)
-       {
-          console.log("erro : ",err);
-         return next(err);
+      // User.update({ "google.email": profile.emails[0].value },{
+      //   $set:{'google.google_id':profile.id}
+      // },function(err,numAffect){
+      //   if (err)
+      //  {
+      //     console.log("erro : ",err);
+      //    return next(err);
 
-      }
-      });
+      // }
+      // });
+      return  done(error, false, "Please ask the admin for help");
 
     }
 
@@ -99,67 +101,67 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
 
     // await newUser.save();
     // done(null, newUser);
-      done(null, {done:done});
+     
   } catch(error) {
     done(error, false, error.message);
   }
 }));
 
-passport.use('facebookToken', new FacebookTokenStrategy({
-  clientID: config.oauth.facebook.clientID,
-  clientSecret: config.oauth.facebook.clientSecret
-}, async (accessToken, refreshToken, profile, done) => {
-  try {
-    console.log('profile', profile);
-    console.log('accessToken', accessToken);
-    console.log('refreshToken', refreshToken);
+// passport.use('facebookToken', new FacebookTokenStrategy({
+//   clientID: config.oauth.facebook.clientID,
+//   clientSecret: config.oauth.facebook.clientSecret
+// }, async (accessToken, refreshToken, profile, done) => {
+//   try {
+//     console.log('profile', profile);
+//     console.log('accessToken', accessToken);
+//     console.log('refreshToken', refreshToken);
 
-    const existingUser = await User.findOne({ "facebook.id": profile.id });
-    if (existingUser) {
-      return done(null, existingUser);
-    }
+//     const existingUser = await User.findOne({ "facebook.id": profile.id });
+//     if (existingUser) {
+//       return done(null, existingUser);
+//     }
 
-    const newUser = new User({
-      method: 'facebook',
-      facebook: {
-        id: profile.id,
-        email: profile.emails[0].value
-      }
-    });
+//     const newUser = new User({
+//       method: 'facebook',
+//       facebook: {
+//         id: profile.id,
+//         email: profile.emails[0].value
+//       }
+//     });
 
-    await newUser.save();
-    done(null, newUser);
-  } catch(error) {
-    done(error, false, error.message);
-  }
-}));
+//     await newUser.save();
+//     done(null, newUser);
+//   } catch(error) {
+//     done(error, false, error.message);
+//   }
+// }));
 
-// LOCAL STRATEGY
-passport.use(new LocalStrategy({
-  usernameField: 'email'
-}, async (email, password, done) => {
-  try {
-    // Find the user given the email
-    const user = await User.findOne({ "local.email": email });
+// // LOCAL STRATEGY
+// passport.use(new LocalStrategy({
+//   usernameField: 'email'
+// }, async (email, password, done) => {
+//   try {
+//     // Find the user given the email
+//     const user = await User.findOne({ "local.email": email });
     
-    // If not, handle it
-    if (!user) {
-      console.log(" If user doesn't exists, handle it---1");
-      return done(null, false);
-    }
+//     // If not, handle it
+//     if (!user) {
+//       console.log(" If user doesn't exists, handle it---1");
+//       return done(null, false);
+//     }
 
-    // Check if the password is correct
-    const isMatch = await user.isValidPassword(password);
-    console.log(" If user doesn't existsuser found , handle it--->2");
-    // If not, handle it
-    if (!isMatch) {
+//     // Check if the password is correct
+//     const isMatch = await user.isValidPassword(password);
+//     console.log(" If user doesn't existsuser found , handle it--->2");
+//     // If not, handle it
+//     if (!isMatch) {
       
-      return done(null, false);
-    }
+//       return done(null, false);
+//     }
 
-    // Otherwise, return the user
-    done(null, user);
-  } catch(error) {
-    done(error, false);
-  }
-}));
+//     // Otherwise, return the user
+//     done(null, user);
+//   } catch(error) {
+//     done(error, false);
+//   }
+// }));
