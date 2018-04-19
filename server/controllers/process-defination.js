@@ -69,7 +69,7 @@ function readFiles(dirPath, filenames) {
   
       
         // collect the content of the choosed files to be then uploaded
-        CamSDK.utils.series(readFiles(options.dirPath, ['process.bpmn']), function (err, files) {
+        CamSDK.utils.series(readFiles(options.dirPath, ['perform_inspection_subprocess.bpmn','start_sub_process.bpmn','verify_jurisdiction_supprocess.bpmn']), function (err, files) {
           thr(err);
   
           console.info(Object.keys(files).length + ' files will be deployed');
@@ -101,7 +101,7 @@ function readFiles(dirPath, filenames) {
   module.exports = {
     deployProcesses:(req, res, next)=>{
         console.log("deployDir 2 --> ",deployDir);
-         deployProcesses({dirPath:deployDir,deploymentName:"tebogo-extenal-worker-process",enableDuplicateFiltering:true,deployChangedOnly:true});
+         deployProcesses({dirPath:deployDir,deploymentName:"timi-extenal-worker-process",enableDuplicateFiltering:true,deployChangedOnly:true});
     
   },
   startProcess:(req, res, next)=>{
@@ -138,6 +138,22 @@ function readFiles(dirPath, filenames) {
     getUnassignedTasks:(req,res)=>{
         const {processDefinitionName}=req.body;
         taskService.list({unassigned:true,processDefinitionNameLike:processDefinitionName},
+    (err,data)=>{
+        if(err){
+            res.status(403).json({ error: 'err'});
+        }
+        else{
+            res.json(data);
+        }
+    })
+    },
+    getMyTasks:(req,res)=>{
+        // const {processDefinitionName}=req.body;
+        console.log("userId in ---000---000---",req.params.id);
+        const userId= req.params.id;
+        console.log("userId in ---000---000---",userId);
+        
+        taskService.list({assignee:userId,active:"true"},
     (err,data)=>{
         if(err){
             res.status(403).json({ error: 'err'});

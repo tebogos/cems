@@ -24,18 +24,26 @@ export const assignUserService = (data) => {
 }
 
 
-
+export const getFirmsService= (searchString) => {
+  return fetch(`http://localhost:8081/firm/get-firm?firmName=${searchString}`)
+    .then(res =>res.json())
+}
 export const getAllProcessUserService = () => {
   return fetch('http://localhost:8081/process-defination/get-all-users')
     .then(res =>res.json())
 }
 
-export const getTodos = () => {
+export const getTasks = () => {
   return fetch('http://localhost:8081/process-defination/get-unassigned-tasks')
     .then(res =>res.json())
 }
 
-export const createTodo = (name) => {
+export const getMyTasks = (userId) => {
+  return fetch(`http://localhost:8081/process-defination/get-my-tasks/${userId}`)
+    .then(res =>res.json())
+}
+
+export const createTask = (name) => {
   return fetch('http://localhost:8081/tasks/task', {
     method: 'POST',
     headers: {
@@ -48,15 +56,15 @@ export const createTodo = (name) => {
 }
 
 
-export const completeTodoService = (todo) => {
-  console.log('update todo --> fecch ',todo );
+export const completeTaskService = (task) => {
+  console.log('update task --> fecch ',task );
   
   var updateInit = { 
               method: 'PUT',
                headers: myHeaders,
                mode: 'cors',
                cache: 'default' ,
-               body: JSON.stringify(todo)};
+               body: JSON.stringify(task)};
   var myRequest = new Request(`http://localhost:8081/process-defination/complete-task`, {
     method: 'POST',
     header:{
@@ -68,23 +76,23 @@ export const completeTodoService = (todo) => {
       'Access-Control-Allow-Headers': "Content-Type",
       mode: 'cors',
                cache: 'default' ,
-               body: JSON.stringify(todo)
+               body: JSON.stringify(task)
     },
   });
   return fetch(myRequest)
     .then(res => res.json())
 }
 
-export const updateTodo = (todo) => {
-  console.log('update todo --> fecch ',todo );
+export const updateTask = (task) => {
+  console.log('update task --> fecch ',task );
   
   var updateInit = { 
               method: 'PUT',
                headers: myHeaders,
                mode: 'cors',
                cache: 'default' ,
-               body: JSON.stringify(todo)};
-  var myRequest = new Request(`http://localhost:8081/tasks/task/${todo._id}`, {
+               body: JSON.stringify(task)};
+  var myRequest = new Request(`http://localhost:8081/tasks/task/${task._id}`, {
     method: 'PUT',
     header:{
       'Accept': 'application/json',
@@ -95,7 +103,7 @@ export const updateTodo = (todo) => {
       'Access-Control-Allow-Headers': "Content-Type",
       mode: 'cors',
                cache: 'default' ,
-               body: JSON.stringify(todo)
+               body: JSON.stringify(task)
     },
   });
   return fetch(myRequest)
@@ -107,7 +115,7 @@ var deleteInit = { method: 'DELETE',
                headers: myHeaders,
                mode: 'cors',
                cache: 'default' };
-export const destroyTodo = (id) => {
+export const destroyTask = (id) => {
   var myRequest = new Request(`http://localhost:8081/tasks/task/${id}`, deleteInit);
   return fetch(myRequest)
 }

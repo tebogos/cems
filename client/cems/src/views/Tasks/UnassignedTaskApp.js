@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route,withRouter} from 'react-router-dom';
-import TodoForm from './TodoForm';
-import MyTasks from './MyTasks';
+import TaskForm from './TaskForm';
+import UnassignedTasks from './UnassignedTasks';
 import Message from './Message';
 import Footer from './Footer';
-import TodoDetails from './TodoDetails';
+import TaskDetails from './TaskDetails';
 import {loginAction,logoutAction} from '../../reducers/login';
 import {Badge, Row, Col, Card, CardHeader, CardFooter, CardBody, Label, Input} from 'reactstrap';
 import jwtDecode from 'jwt-decode';
 import {connect} from 'react-redux';
 
-class MyTasks extends Component {
+class UnassignedTaskApp extends Component {
 
   componentDidMount()
  {
@@ -40,17 +40,17 @@ if(expired){
     render() {
         return (
  <Router>
- <div className="Todo-App">
+ <div className="Task-App">
  <Card>
               <CardHeader>
-                My Tasks
+                Unassigned Tasks
               </CardHeader>
               <CardBody>
               <Message />
-   {/* <TodoForm /> */}
+   {/* <TaskForm /> */}
    
    <Route path='/:filter?' render={({match}) => (
-       <MyTasks filter={match.params.filter} />
+       <UnassignedTasks filter={match.params.filter} />
      )} />
    {/* <Footer /> */}
   
@@ -66,4 +66,4 @@ if(expired){
 
 
 export default withRouter( connect((state) => ({authenticated: state.login.authenticated,redirectUrl: state.login.redirectUrl}),{loginAction,logoutAction}
-)(MyTasks))
+)(UnassignedTaskApp))

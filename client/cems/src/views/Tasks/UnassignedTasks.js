@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {changeSelectedTask,getAllProcessUser,fetchTodos, toggleTodo, deleteTodo, getVisibleTodos,completTodo} from '../../reducers/todo';
+import {changeSelectedTask,getAllProcessUser,fetchTasks, toggleTask, deleteTask, getVisibleTasks,completTask} from '../../reducers/task';
 import {ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText,
   Badge
 } from 'reactstrap';
 import TaskItem from './TaskItem';
-import TodoDetails from './TodoDetails';
+import TaskDetails from './TaskDetails';
 
 
 class UnassignedTasks extends Component {
@@ -27,24 +27,24 @@ class UnassignedTasks extends Component {
     this.setState({showDetails:false})
   }
   componentDidMount() {
-    this.props.fetchTodos();
+    this.props.fetchTasks();
       this.props.getAllProcessUser();
   }
 
   render() {
-    console.log('UnassignedTasks prop -->',this.props.todos);
+    console.log('UnassignedTasks prop -->',this.props.tasks);
     
     return (
-      <div className="Todo-List">
+      <div className="Task-List">
       {
-        this.state.showDetails?<TodoDetails  hideDetails={this.hideDetails}/>:
+        this.state.showDetails?<TaskDetails  hideDetails={this.hideDetails}/>:
       ( <ListGroup>                  
           {this.props.tasks.map(task =>
             <TaskItem key={task.id}
            
             showDetails={this.showDetails}
-              toggleTodo={this.props.toggleTodo}
-              deleteTodo={this.props.deleteTodo}
+              toggleTask={this.props.toggleTask}
+              deleteTask={this.props.deleteTask}
               changeSelectedTask={this.props.changeSelectedTask}
               {...task} />)
               }
@@ -56,6 +56,6 @@ class UnassignedTasks extends Component {
 }
 
 export default connect(
-  (state, ownProps) => ({tasks: getVisibleTodos(state.todo.todos, ownProps.filter)}),
-  {fetchTodos, toggleTodo, deleteTodo,completTodo,getAllProcessUser,changeSelectedTask}
+  (state, ownProps) => ({tasks: getVisibleTasks(state.task.tasks, ownProps.filter)}),
+  {fetchTasks, toggleTask, deleteTask,completTask,getAllProcessUser,changeSelectedTask}
 )(UnassignedTasks)

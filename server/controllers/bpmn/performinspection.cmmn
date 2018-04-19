@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cmmn:definitions xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:cmmn="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/cmmn" id="Test" targetNamespace="http://bpmn.io/schema/cmmn" exporter="Camunda Modeler" exporterVersion="1.10.0">
+  <cmmn:case id="peformInspection" name="Perform Inspection">
+    <cmmn:casePlanModel id="CasePlanModel_1" name="Perform Inspection">
+      <cmmn:planItem id="PlanItem_1" name="Shedule Inspection" definitionRef="HumanTask_06yeq54" />
+      <cmmn:planItem id="PlanItem_0v72dzs" name="Peform Inspection" definitionRef="HumanTask_17qh0x3">
+        <cmmn:entryCriterion id="EntryCriterion_18wqkmp" sentryRef="Sentry_1fw58di" />
+      </cmmn:planItem>
+      <cmmn:sentry id="Sentry_1fw58di">
+        <cmmn:planItemOnPart id="PlanItemOnPart_1br7pv8" sourceRef="PlanItem_1">        <cmmn:standardEvent>complete</cmmn:standardEvent>
+</cmmn:planItemOnPart>
+      </cmmn:sentry>
+      <cmmn:humanTask id="HumanTask_06yeq54" camunda:assignee="${firstAssignee}" />
+      <cmmn:humanTask id="HumanTask_17qh0x3" camunda:assignee="${firstAssignee}" />
+    </cmmn:casePlanModel>
+  </cmmn:case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="_5a66685b-5f57-4e2f-b1d1-acca4fae04b2">
+      <cmmndi:Size xsi:type="dc:Dimension" width="500" height="500" />
+      <cmmndi:CMMNShape id="DI_CasePlanModel_1" cmmnElementRef="CasePlanModel_1">
+        <dc:Bounds x="114" y="63" width="534" height="389" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="PlanItem_09oshak_di" cmmnElementRef="PlanItem_1">
+        <dc:Bounds x="150" y="96" width="100" height="80" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="EntryCriterion_18wqkmp_di" cmmnElementRef="EntryCriterion_18wqkmp">
+        <dc:Bounds x="318" y="123" width="20" height="28" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNEdge id="PlanItemOnPart_1br7pv8_di" cmmnElementRef="PlanItemOnPart_1br7pv8" targetCMMNElementRef="EntryCriterion_18wqkmp" isStandardEventVisible="true">
+        <di:waypoint xsi:type="dc:Point" x="250" y="136" />
+        <di:waypoint xsi:type="dc:Point" x="318" y="137" />
+        <cmmndi:CMMNLabel>
+          <dc:Bounds x="251" y="123.5" width="51" height="12" />
+        </cmmndi:CMMNLabel>
+      </cmmndi:CMMNEdge>
+      <cmmndi:CMMNShape id="PlanItem_0jrllvr_di" cmmnElementRef="PlanItem_0v72dzs">
+        <dc:Bounds x="328" y="96" width="100" height="80" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</cmmn:definitions>

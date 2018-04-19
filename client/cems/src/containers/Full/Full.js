@@ -14,13 +14,14 @@ import SeniorAgentPrivateRoute from '../SeniorAgentPrivateRoute';
 
 
 
-
+import StartProcess from '../../views/Process/StartProcess';
+import MyTasksApp from '../../views/Tasks/MyTasksApp';
 import Dashboard from '../../views/Dashboard/';
 
 import Colors from '../../views/Theme/Colors/';
 import Typography from '../../views/Theme/Typography/';
 
-import TodoApp from '../../views/Todo/TodoApp';
+import UnassignedTaskApp from '../../views/Tasks/UnassignedTaskApp';
 import Charts from '../../views/Charts/';
 import Widgets from '../../views/Widgets/';
 
@@ -109,8 +110,9 @@ if(expired){
                 <PrivateRoute path="/dashboard" authenticated={this.props.authenticated} name="Dashboard" component={Dashboard}/>
                 <PrivateRoute path="/my-tasks" authenticated={this.props.authenticated} name="MyTasks" component={MyTasksApp}/>
                 <Route exact path="/login"  name="Login Page" component={Login}/>
-                <SeniorAgentPrivateRoute path="/unassigned-tasks" role={this.props.role} authenticated={this.props.authenticated} name="UnassignedTasks" component={TodoApp}/>
+                <SeniorAgentPrivateRoute path="/unassigned-tasks" role={this.props.role} authenticated={this.props.authenticated} name="UnassignedTasks" component={UnassignedTaskApp}/>
                 <AdminPrivateRoute role={this.props.role} authenticated={this.props.authenticated} path="/theme/colors" name="Colors" component={Colors}/>
+                <PrivateRoute path="/start-process" authenticated={this.props.authenticated} name="StartProcess" component={StartProcess}/>
                 <Route path="/theme/typography" name="Typography" component={Typography}/>
                 <Route path="/base/cards" name="Cards" component={Cards}/>
                 <Route path="/base/forms" name="Forms" component={Forms}/>

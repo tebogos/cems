@@ -5,7 +5,7 @@ const router = require('express-promise-router')();
 
 const ProcessDefinationController =require('../controllers/process-defination');
 
-router.route('/create')
+router.route('/deploy')
 .get(ProcessDefinationController.deployProcesses);
 
 router.route('/start-process')
@@ -16,6 +16,8 @@ router.route('/start-selected-process')
 
 router.route('/get-unassigned-tasks')
 .get(ProcessDefinationController.getUnassignedTasks);
+router.route('/get-my-tasks/:id')
+.get(ProcessDefinationController.getMyTasks);
 
 router.route('/get-all-users')
 .get(ProcessDefinationController.getAllUsers);

@@ -36,6 +36,7 @@ app.use(bodyParser.json());
 // Routes
 app.use('/users', require('./routes/users'));
 app.use('/tasks', require('./routes/tasks'));
+app.use('/firm', require('./routes/firm'));
 app.use('/process-defination', require('./routes/process-defination'));
 
 module.exports = app;

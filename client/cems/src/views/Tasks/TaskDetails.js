@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {assignUser,getAllProcessUser,fetchTodos, toggleTodo, deleteTodo, getVisibleTodos,completTodo} from '../../reducers/todo';
+import {assignUser,getAllProcessUser,fetchTasks, toggleTask, deleteTask, getVisibleTasks,completTask} from '../../reducers/task';
 import AssignUserFrom from './AssignUserForm';
 import Moment from 'react-moment';
-import MaterialReactSelect from './MaterialReactSelect';
  
 import {
     ListGroup,ListGroupItem,ListGroupItemHeading,
@@ -30,7 +29,7 @@ import {
   } from 'reactstrap';
 
 
-  class TodoDetails extends React.Component {
+  class TaskDetails extends React.Component {
     constructor(props) {
       super(props);
   
@@ -121,7 +120,6 @@ render() {
                   <ListGroupItem disabled tag="button" action>Note that the above distinction does not say whether the actual “business logic” is implemented locally or as a remote service. The Java Delegate invoked by an internal service task may either implement the business logic itself or it may call out to a web/rest service, send a message to another system and so forth. The same is true for an external worker. The worker can implement the business logic directly or again delegate to a remote system.<Badge className="float-right" pill>18 Dec 2018</Badge></ListGroupItem>
                 </ListGroup>
                 </Row>
-                {/* <MaterialReactSelect suggestions={suggestions}/> */}
               </CardBody>
             </Card>
           </Col>
@@ -134,7 +132,7 @@ render() {
 
 
 export default connect(
-  (state, ownProps) => ({todos: getVisibleTodos(state.todo.todos, ownProps.filter),
-    userList: state.todo.userList,selectedTask:state.todo.selectedTask}),
-  {fetchTodos, toggleTodo, deleteTodo,completTodo,getAllProcessUser,assignUser}
-)(TodoDetails)
+  (state, ownProps) => ({tasks: getVisibleTasks(state.task.tasks, ownProps.filter),
+    userList: state.task.userList,selectedTask:state.task.selectedTask}),
+  {fetchTasks, toggleTask, deleteTask,completTask,getAllProcessUser,assignUser}
+)(TaskDetails)

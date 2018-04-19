@@ -29,8 +29,18 @@ export default {
       icon: 'icon-drop',
     },
     {
+      name: 'Start Process',
+      url: '/start-process',
+      icon: 'icon-gear',
+    },
+    {
       name: 'Unassigned Tasks',
       url: '/unassigned-tasks',
+      icon: 'icon-drop',
+    },
+    {
+      name: 'My Tasks',
+      url: '/my-tasks',
       icon: 'icon-drop',
     },
     {

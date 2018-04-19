@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.10.0">
+  <bpmn:collaboration id="Collaboration_1uqqayq">
+    <bpmn:participant id="perform_inspection_subprocess_id" name="Perform Inspection" processRef="perform_inspection_subprocess" />
+  </bpmn:collaboration>
+  <bpmn:process id="perform_inspection_subprocess" name="Perform Inspection" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_0g5xhyu">
+      <bpmn:outgoing>SequenceFlow_1hwcbvd</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="EndEvent_11it50h">
+      <bpmn:incoming>SequenceFlow_1tpgcpr</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="Task_0xk3ftc" name="Perform Inspection" camunda:assignee="${firstAssignee}">
+      <bpmn:incoming>SequenceFlow_0r0ccja</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1tpgcpr</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="perform_inspection_task1" name="Schedule Inspectio" camunda:assignee="${firstAssignee}">
+      <bpmn:incoming>SequenceFlow_1hwcbvd</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0r0ccja</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1hwcbvd" sourceRef="StartEvent_0g5xhyu" targetRef="perform_inspection_task1" />
+    <bpmn:sequenceFlow id="SequenceFlow_0r0ccja" sourceRef="perform_inspection_task1" targetRef="Task_0xk3ftc" />
+    <bpmn:sequenceFlow id="SequenceFlow_1tpgcpr" sourceRef="Task_0xk3ftc" targetRef="EndEvent_11it50h" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1uqqayq">
+      <bpmndi:BPMNShape id="Participant_0142kzb_di" bpmnElement="perform_inspection_subprocess_id">
+        <dc:Bounds x="88" y="70" width="600" height="359" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_0g5xhyu_di" bpmnElement="StartEvent_0g5xhyu">
+        <dc:Bounds x="208" y="237" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="226" y="277" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1hwcbvd_di" bpmnElement="SequenceFlow_1hwcbvd">
+        <di:waypoint xsi:type="dc:Point" x="244" y="255" />
+        <di:waypoint xsi:type="dc:Point" x="284" y="255" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="264" y="234" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0r0ccja_di" bpmnElement="SequenceFlow_0r0ccja">
+        <di:waypoint xsi:type="dc:Point" x="384" y="255" />
+        <di:waypoint xsi:type="dc:Point" x="416" y="255" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="400" y="234" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_11it50h_di" bpmnElement="EndEvent_11it50h">
+        <dc:Bounds x="550" y="237" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="568" y="277" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1tpgcpr_di" bpmnElement="SequenceFlow_1tpgcpr">
+        <di:waypoint xsi:type="dc:Point" x="516" y="255" />
+        <di:waypoint xsi:type="dc:Point" x="550" y="255" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="533" y="234" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1pgt373_di" bpmnElement="perform_inspection_task1">
+        <dc:Bounds x="284" y="215" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1tc0sma_di" bpmnElement="Task_0xk3ftc">
+        <dc:Bounds x="416" y="215" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

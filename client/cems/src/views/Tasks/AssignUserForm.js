@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {assignUser,getAllProcessUser} from '../../../src/reducers/todo';
+import {assignUser,getAllProcessUser} from '../../../src/reducers/task';
 import 'react-select/dist/react-select.css';
 import styled from 'styled-components';
 import ReactSelect from "react-select";
@@ -109,5 +109,5 @@ margin-top:15px;
 )}
 }
 export default connect(
-  (state) => ({userList: state.todo.userList,selectedTask:state.todo.selectedTask},{assignUser,getAllProcessUser})
+  (state) => ({userList: state.task.userList,selectedTask:state.task.selectedTask},{assignUser,getAllProcessUser})
 )(AssignUserFrom)

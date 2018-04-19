@@ -1,7 +1,8 @@
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import todoReducer from './reducers/todo';
+import taskReducer from './reducers/task';
+import firmReducer from './reducers/firm';
 import messageReducer from './reducers/messages';
 import loginReducer from './reducers/login';
 import { persistStore, persistReducer } from 'redux-persist'
@@ -20,7 +21,8 @@ const persistConfig = {
   storage,
 }
 const reducer = combineReducers({
-  todo: todoReducer,
+  task: taskReducer,
+  firm:firmReducer,
   message: messageReducer,
   login:loginReducer,
   router: routerReducer

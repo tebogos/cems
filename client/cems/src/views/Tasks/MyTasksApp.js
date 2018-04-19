@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route,withRouter} from 'react-router-dom';
-import TodoForm from './TodoForm';
-import UnassignedTasks from './UnassignedTasks';
+import TaskForm from './TaskForm';
+import MyTasks from './MyTasks';
 import Message from './Message';
 import Footer from './Footer';
-import TodoDetails from './TodoDetails';
+import TaskDetails from './TaskDetails';
 import {loginAction,logoutAction} from '../../reducers/login';
 import {Badge, Row, Col, Card, CardHeader, CardFooter, CardBody, Label, Input} from 'reactstrap';
 import jwtDecode from 'jwt-decode';
 import {connect} from 'react-redux';
+import MaterialUIAutocomplete from './MaterialUIAutocomplete';
 
-class TodoApp extends Component {
+class MyTasksApps extends Component {
 
   componentDidMount()
  {
@@ -40,17 +41,18 @@ if(expired){
     render() {
         return (
  <Router>
- <div className="Todo-App">
+ <div className="Task-App">
  <Card>
               <CardHeader>
-                Todos
+                My Tasks
               </CardHeader>
               <CardBody>
+            <MaterialUIAutocomplete />
               <Message />
-   {/* <TodoForm /> */}
+   {/* <TaskForm /> */}
    
    <Route path='/:filter?' render={({match}) => (
-       <UnassignedTasks filter={match.params.filter} />
+       <MyTasks filter={match.params.filter} />
      )} />
    {/* <Footer /> */}
   
@@ -66,4 +68,4 @@ if(expired){
 
 
 export default withRouter( connect((state) => ({authenticated: state.login.authenticated,redirectUrl: state.login.redirectUrl}),{loginAction,logoutAction}
-)(TodoApp))
+)(MyTasksApps))

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {changeSelectedTask,getAllProcessUser,fetchTodos, toggleTodo, deleteTodo, getVisibleTodos,completTodo} from '../../reducers/todo';
+import {changeSelectedTask,getAllProcessUser,fetchTasks, toggleTask, deleteTask, getVisibleTasks,completTask} from '../../reducers/task';
 import {ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText,
   Badge
 } from 'reactstrap';
@@ -12,13 +12,13 @@ class TaskItem extends React.Component{
  render() {
      return (
     <ListGroupItem  action className="justify-content-between">
-        <button className="btn-icon list-items-space" onClick={() => this.props.deleteTodo(id)} >
+        <button className="btn-icon list-items-space" onClick={() => this.props.deleteTask(id)} >
         <i className='fa fa-trash-o trash-icon' aria-hidden="true"/>
         </button>
         <label className="fancy-checkbox list-items-space">
       <input type="checkbox"
         checked={false}
-        onChange={() => this.props.completTodo(id)} />
+        onChange={() => this.props.completTask(id)} />
         <i className="fa fa-square-o fa-lg  unchecked"></i>
       <i className="fa fa-check-square-o fa-lg checked-icon checked"></i>
       </label>
@@ -45,6 +45,6 @@ class TaskItem extends React.Component{
 }
 }
   export default connect(
-    (state, ownProps) => ({tasks: getVisibleTodos(state.todo.todos, ownProps.filter)}),
-    {fetchTodos, toggleTodo, deleteTodo,completTodo,getAllProcessUser,changeSelectedTask}
+    (state, ownProps) => ({tasks: getVisibleTasks(state.task.tasks, ownProps.filter)}),
+    {fetchTasks, toggleTask, deleteTask,completTask,getAllProcessUser,changeSelectedTask}
   )(TaskItem)

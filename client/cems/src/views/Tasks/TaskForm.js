@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {updateCurrent, saveTodo} from '../../reducers/todo'
+import {updateCurrent, saveTask} from '../../reducers/task'
 
-class TodoForm extends Component {
+class TaskForm extends Component {
   
 
   render() {
@@ -13,20 +13,20 @@ class TodoForm extends Component {
   
     const handleSubmit = (evt) => {
       evt.preventDefault()
-      this.props.saveTodo(this.props.currentTodo)
+      this.props.saveTask(this.props.currentTask)
     }
-    const {currentTodo} = this.props
+    const {currentTask} = this.props
     return (
       <form onSubmit={handleSubmit}>
         <input type="text"
           onChange={handleInputChange}
-          value={currentTodo}/>
+          value={currentTask}/>
       </form>
     )
   }
 }
 
 export default connect(
-  (state) => ({currentTodo: state.todo.currentTodo}),
-  {updateCurrent, saveTodo}
-)(TodoForm)
+  (state) => ({currentTask: state.task.currentTask}),
+  {updateCurrent, saveTask}
+)(TaskForm)
