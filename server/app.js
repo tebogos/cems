@@ -38,5 +38,6 @@ app.use('/users', require('./routes/users'));
 app.use('/tasks', require('./routes/tasks'));
 app.use('/firm', require('./routes/firm'));
 app.use('/process-defination', require('./routes/process-defination'));
+app.use('/upload-handler', require('./routes/upload-handler'));
 
 module.exports = app;

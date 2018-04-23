@@ -10,11 +10,11 @@
     <bpmn:endEvent id="EndEvent_11it50h">
       <bpmn:incoming>SequenceFlow_1tpgcpr</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Task_0xk3ftc" name="Perform Inspection" camunda:assignee="${firstAssignee}">
+    <bpmn:userTask id="Task_0xk3ftc" name="Perform Inspection" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(5).toDate()}">
       <bpmn:incoming>SequenceFlow_0r0ccja</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1tpgcpr</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="perform_inspection_task1" name="Schedule Inspectio" camunda:assignee="${firstAssignee}">
+    <bpmn:userTask id="perform_inspection_task1" name="Schedule Inspectio" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(3).toDate()}">
       <bpmn:incoming>SequenceFlow_1hwcbvd</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0r0ccja</bpmn:outgoing>
     </bpmn:userTask>

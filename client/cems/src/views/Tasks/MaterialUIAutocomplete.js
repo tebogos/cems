@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import { change } from 'redux-form';
 import AutoComplete from 'material-ui/AutoComplete';
 import {getFirmsService} from '../../reducers/task';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -51,7 +52,10 @@ class MaterialUIAutocomplete extends Component {
       });
       const firmName=this.state.inputValue;      
       const firmNumber=this.props.firms.filter(firm=>firm.name===firmName).map(firm=>firm.firmNumber)[0];
-      this.props.updateSelectedFirm({firmName:firmName,firmNumber:firmNumber});
+      if(firmNumber)
+        this.props.updateSelectedFirm({firmName:firmName,firmNumber:firmNumber,firmFound:true});
+      else
+       this.props.updateSelectedFirm({firmName:firmName,firmNumber:firmNumber,firmFound:false});
     }
   }
 

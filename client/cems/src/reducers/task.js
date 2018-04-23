@@ -18,7 +18,8 @@ const initState = {
   priority:0,
   processDefinitionId:"",
   processInstanceId:"",
-  taskDefinitionKey:""
+  taskDefinitionKey:"",
+  businessKey:""
   },
   currenttask: ''
 }
@@ -59,7 +60,7 @@ export const fetchMyTasks = (userId) => {
   
   return (dispatch) => {
     dispatch(showMessage('Loading Tasks'))
-    getMyTasks("tebogos@gmail.com").then(tasks=>console.log('<--tasks._embedded.task--> ',tasks._embedded.task)||tasks._embedded.task.map(task=>{
+    getMyTasks("tebogos@gmail.com").then(tasks=>tasks.tasks._embedded.task.map(task=>{
       console.log(" Task|....| --->",task);
       
       return ({id:task.id,
@@ -77,7 +78,9 @@ export const fetchMyTasks = (userId) => {
       processDefinitionId:task.processDefinitionId,
       processInstanceId:task.processInstanceId,     
       taskDefinitionKey:task.taskDefinitionKey,
-      isComplete:false
+      isComplete:false,
+      firmFound:tasks.variables.filter(vr=>vr.name==="firmFound").map(vr=>vr.value),
+      businessKey:tasks.variables.filter(vr=>vr.name==="businessKey").map(vr=>vr.value)
       })
       
       
@@ -89,7 +92,7 @@ export const fetchMyTasks = (userId) => {
 export const fetchTasks = () => {
   return (dispatch) => {
     dispatch(showMessage('Loading Tasks'))
-    getTasks().then(tasks=>console.log('<--tasks._embedded.task--> ',tasks._embedded.task)||tasks._embedded.task.map(task=>{
+    getTasks().then(tasks=>tasks.tasks._embedded.task.map(task=>{
       console.log(" Task|....| --->",task);
       
       return ({id:task.id,
@@ -107,7 +110,9 @@ export const fetchTasks = () => {
       processDefinitionId:task.processDefinitionId,
       processInstanceId:task.processInstanceId,     
       taskDefinitionKey:task.taskDefinitionKey,
-      isComplete:false
+      isComplete:false,
+      firmFound:tasks.variables.filter(vr=>vr.name==="firmFound").map(vr=>vr.value),
+      businessKey:tasks.variables.filter(vr=>vr.name==="businessKey").map(vr=>vr.value)
       })
       
       

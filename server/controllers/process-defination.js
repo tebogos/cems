@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var inquirer = require('inquirer');
 var Table = require('cli-table');
+const moment =require('moment');
 const camClient = new CamSDK.Client({
     mock: false,
     // the following URL does not need authentication,
@@ -18,6 +19,7 @@ const filterService             = new camClient.resource('filter');
 const deploymentService         = new camClient.resource('deployment');
 const taskService        = new camClient.resource('task');
 const userService        = new camClient.resource('user');
+const variableService        = new camClient.resource('variable');
 
 
 
@@ -117,17 +119,36 @@ function readFiles(dirPath, filenames) {
             name: definition.name || definition.key || definition.id
           };
         });
+        console.log("difinitions on server ",definitions );
+        
         res.json({definitions:definitions})
     });
     },
     submitSelectedProcess:(req, res, next)=>{
+     console.log("startin the sending process...");
+       
  // ask which process should be started
- const {processId } = req.body;
+ const {processId,requestorName,
+    requetorId,workType,zone,region,firms,notes } = req.body;
+    console.log("processId...",processId);
+     const businessKey=zone+"-"+moment().year()+"-"+moment().month()+"-"+
+     moment().day()+"-"+moment().hour()+"-"+moment().minute()+"-"+moment().second();
+     console.log("businessKey...",businessKey);
         // start the choosed process definition
         processDefinitionService.submitForm({
             id:processId,
-            variables:{firstAssignee:{value:"",type:"String"}},
-            businessKey:"GRO123456-zone1"
+            variables:{
+            firstAssignee:{value:"",type:"String"},
+            requetorId:{value:requetorId,type:"String"},
+            workType:{value:workType,type:"String"},
+            zone:{value:zone,type:"String"},
+            region:{value:region,type:"String"},
+            firms:{value:firms,type:"String"},
+            notes:{value:notes,type:"String"},
+            firmFound:{value:true,type:"boolean"},
+            businessKey:{value:businessKey,type:"String"}
+        },
+            businessKey:businessKey
           }, function (err) {
             thr(err);
     
@@ -135,23 +156,40 @@ function readFiles(dirPath, filenames) {
             res.json({status:"Process started successfuly"})
           });
     },
-    getUnassignedTasks:(req,res)=>{
+    getUnassignedTasks:async (req,res)=>{
         const {processDefinitionName}=req.body;
-        taskService.list({unassigned:true,processDefinitionNameLike:processDefinitionName},
+        let tasks;
+      await  taskService.list({unassigned:true,processDefinitionNameLike:processDefinitionName},
     (err,data)=>{
         if(err){
             res.status(403).json({ error: 'err'});
         }
         else{
-            res.json(data);
+            // res.json(data);
+             tasks=data;
         }
-    })
+    });
+    
+    
+    const processInstanceId=tasks._embedded.task[0].processInstanceId;
+    console.log("task 0000---111 ",processInstanceId);
+    variableService.instances({processInstanceIdIn:[processInstanceId]},
+        (err,data)=>{
+            if(err){
+                res.status(403).json({ error: 'err'});
+            }
+            else{
+                res.json({tasks:tasks,variables:data});
+                 
+            }
+        });
     },
     getMyTasks:(req,res)=>{
         // const {processDefinitionName}=req.body;
         console.log("userId in ---000---000---",req.params.id);
         const userId= req.params.id;
         console.log("userId in ---000---000---",userId);
+        let tasks;
         
         taskService.list({assignee:userId,active:"true"},
     (err,data)=>{
@@ -160,6 +198,7 @@ function readFiles(dirPath, filenames) {
         }
         else{
             res.json(data);
+            tasks=data;
         }
     })
     },

@@ -20,7 +20,7 @@
     <bpmn:startEvent id="StartEvent_1k322pj" name="Start VErification">
       <bpmn:outgoing>SequenceFlow_1iz4sec</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="UserTask_0ya5xim" name="Verify Jurisdiction" camunda:assignee="${firstAssignee}">
+    <bpmn:userTask id="UserTask_0ya5xim" name="Verify Jurisdiction" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(5).toDate()}">
       <bpmn:incoming>SequenceFlow_0b9sh5w</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_07feycx</bpmn:outgoing>
     </bpmn:userTask>
@@ -32,7 +32,7 @@
     <bpmn:endEvent id="EndEvent_1n0t4mu" name="End Verification">
       <bpmn:incoming>SequenceFlow_095z878</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="UserTask_0i10mxr" name="Schedule verification" camunda:assignee="${firstAssignee}">
+    <bpmn:userTask id="UserTask_0i10mxr" name="Schedule verification" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(3).toDate()}">
       <bpmn:incoming>SequenceFlow_1iz4sec</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0b9sh5w</bpmn:outgoing>
     </bpmn:userTask>
@@ -49,7 +49,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${scope==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_004pe7y" sourceRef="UserTask_16fkhdu" targetRef="EndEvent_1sb26w3" />
-    <bpmn:userTask id="UserTask_16fkhdu" name="Register Firm" camunda:assignee="${firstAssignee}">
+    <bpmn:userTask id="UserTask_16fkhdu" name="Register Firm" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(6).toDate()}">
       <bpmn:incoming>SequenceFlow_158ceq4</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_004pe7y</bpmn:outgoing>
     </bpmn:userTask>

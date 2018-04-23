@@ -57,16 +57,7 @@ import {
       }
 render() {
     console.log("Props from task details 1110000----0000111",this.props.selectedTask.due);
-    const suggestions = [
-      { label: 'Afghanistan' },
-      { label: 'Aland Islands' },
-      { label: 'Albania' },
-      { label: 'Algeria' },
-      { label: 'American Samoa' },
-      { label: 'Andorra' },
-      { label: 'Angola' },
-      { label: 'South Africa' }
-    ]
+    
     return (
     <div className="animated fadeIn">
    <Row>
@@ -75,7 +66,7 @@ render() {
             <Card>
               <CardHeader>
                 <strong>Task Details</strong>
-                <small> Form</small>
+                <small> {this.props.selectedTask.businessKey}</small>
               </CardHeader>              
               <CardBody>
        <i className="fa fa-arrow-left fa-lg mt-4" onClick={()=>this.props.hideDetails()}></i>

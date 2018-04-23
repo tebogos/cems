@@ -47,7 +47,7 @@
     <bpmn:endEvent id="EndEvent_1q8q7vh" name="End process">
       <bpmn:incoming>SequenceFlow_05skm73</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Task_0g2kvfb" name="Generate Report" camunda:assignee="${firstAssignee}">
+    <bpmn:userTask id="Task_0g2kvfb" name="Generate Report" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(10).toDate()}">
       <bpmn:incoming>SequenceFlow_1txfq5p</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0m31ct0</bpmn:outgoing>
     </bpmn:userTask>
@@ -57,16 +57,16 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_05rs8re</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Task_19nhn0m" name="Do Pleminary Registration" camunda:candidateGroups="${agent}">
+    <bpmn:userTask id="Task_19nhn0m" name="Do Pleminary Registration" camunda:candidateGroups="${agent}" camunda:dueDate="${dateTime().plusDays(1).toDate()}">
       <bpmn:incoming>SequenceFlow_0mwzntv</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_18cv0bb</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_18cv0bb" sourceRef="Task_19nhn0m" targetRef="Task_0yei3sa" />
-    <bpmn:userTask id="Task_0fm0nfz" name="Assign Task">
+    <bpmn:userTask id="Task_0fm0nfz" name="Assign Task" camunda:dueDate="${dateTime().plusDays(2).toDate()}">
       <bpmn:incoming>SequenceFlow_0aah0kd</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1c6ni6s</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Task_0yei3sa" name="Assign Task">
+    <bpmn:userTask id="Task_0yei3sa" name="Assign Task" camunda:dueDate="${dateTime().plusDays(2).toDate()}">
       <bpmn:incoming>SequenceFlow_18cv0bb</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ftr8ar</bpmn:outgoing>
     </bpmn:userTask>
