@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 var cors = require('cors');
+const path = require('path');
 
 mongoose.Promise = global.Promise;
 if (process.env.NODE_ENV === 'test') {
@@ -25,12 +26,12 @@ const corsOptions = {
 }
 
 app.use(cors());
-// app.use(function(req, res, next) { 
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
-//   res.header("Access-Control-Allow-Headers", "GET,POST,PUT,DELETE,OPTIONS");
-//   next();
-// });
+app.use(function(req, res, next) { 
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "GET,POST,PUT,DELETE,OPTIONS");
+  next();
+});
 app.use(bodyParser.json());
 
 // Routes
@@ -39,5 +40,12 @@ app.use('/tasks', require('./routes/tasks'));
 app.use('/firm', require('./routes/firm'));
 app.use('/process-defination', require('./routes/process-defination'));
 app.use('/upload-handler', require('./routes/upload-handler'));
+
+app.use(express.static(__dirname + '/public/'))
+
+app.get('*', function (request, response){
+  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+})
+
 
 module.exports = app;

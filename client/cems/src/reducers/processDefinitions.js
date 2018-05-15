@@ -3,7 +3,7 @@ import {showMessage} from './messages';
 
 const initState = {
     definitions: []
- 
+  
 }
 
 
@@ -30,6 +30,8 @@ export default (state = initState, action) => {
   switch (action.type) {
     case LOAD_DIFINITIONS:
       return {...state, definitions: action.payload}
+   
+
     default:
       return state
   }

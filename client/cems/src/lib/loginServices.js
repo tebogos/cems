@@ -1,5 +1,10 @@
 
 
+import {baseUrl} from '../../baseUrl';
+  // const  baseUrl = process.env.REACT_APP_BASE_URL
+
+    console.log("process.env.NODE_ENV",process.env.NODE_ENV);
+    
 
 var myHeaders = new Headers({
   'Accept': 'application/json',
@@ -10,7 +15,7 @@ var myHeaders = new Headers({
   'Access-Control-Allow-Headers': "Content-Type"
 });
 export const httpLoginUser = (tokenId) => {
-    return fetch('http://localhost:8081/users/oauth/google',{
+    return fetch(`${baseUrl}/users/oauth/google`,{
       method: 'POST',
       headers: {
         'Accept': 'application/json',

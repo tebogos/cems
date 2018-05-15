@@ -1,4 +1,5 @@
-const baseUrl = process.env.REACT_APP_BASE_URL
+import {baseUrl} from '../../baseUrl';
+// const  baseUrl = process.env.REACT_APP_BASE_URL
 
 var myHeaders = myHeaders = new Headers({
   'Accept': 'application/json',
@@ -15,6 +16,6 @@ var myHeaders = myHeaders = new Headers({
 
 
 export const getFirmsService= (searchString) => {
-  return fetch(`http://localhost:8081/firm/get-firm?firmName=${searchString}`)
+  return fetch(`${baseUrl}/firm/get-firm?firmName=${searchString}`)
     .then(res =>res.json())
 }

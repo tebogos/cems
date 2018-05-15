@@ -11,10 +11,20 @@ const passportJWT = passport.authenticate('jwt', { session: false });
 
 router.route('/task')
 .get(TaskController.task);
+router.route('/schedule-task-completion-form')
+.post(TaskController.sheduleTaskCompletionForm);
+router.route('/add-task-note')
+.post(TaskController.addTaskNote);
+router.route('/complete-task')
+.post(TaskController.completeTask);
+router.route('/task-comments')
+.get(TaskController.getTaskComments);
 router.route('/task')
 .post(TaskController.saveTask);
 router.route('/task/:id')
 .put(TaskController.updateTask);
-router.route('/task/:id')
-.delete(TaskController.deleteTask);
+
+
+
+
 module.exports = router;

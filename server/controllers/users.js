@@ -10,7 +10,7 @@ signToken = user => {
     iss: 'siyandiza',
     sub: user.id,    
     iat: new Date().getTime(), // current time
-    exp: new Date().setDate(new Date().getDate() + 1) // current time + 1 day ahead
+    exp: new Date().setDate((new Date().getDate() + 1)) // current time + 2 day ahead
   }, JWT_SECRET);
 }
 
@@ -80,12 +80,15 @@ module.exports = {
   // },
 
   googleOAuth: async (req, res, next) => {
-    console.log("req user ",req.user.id);
+    console.log("req user ",req.user);
     
+    
+    const {region}=req.user.google
+    console.log("user.google region <<<< ----- >>>>>> ",req.user.google.region);
     // Generate token
     const token = signToken(req.user);
     res.status(200).json({ token:token,usename:req.user.google.email,
-      imageUrl:"http://xxxxxxx",role:req.user.google.role });
+      imageUrl:"http://xxxxxxx",role:req.user.google.role,region:region });
   },
 
   // facebookOAuth: async (req, res, next) => {
@@ -101,7 +104,7 @@ module.exports = {
   // task: async (req,res,next)=>{
 
   //   const url =
-  //   "http://localhost:8080/engine-rest/task?assignee=demo";
+  //   "${baseUrl}/engine-rest/task?assignee=demo";
   // // fetch(url)
   // //   .then(response => {
   // //     response.json().then(json => {

@@ -6,6 +6,109 @@ const {getTask}=require('../helpers/taskApi');
 const todo=require('../models/db.json');
 const Tasks = require('../models/task');
 const mongoose =require('mongoose');
+const {baseUrl} = require('../base-url');
+
+const CamSDK = require('camunda-bpm-sdk-js');
+
+var fs = require('fs');
+var path = require('path');
+var inquirer = require('inquirer');
+var Table = require('cli-table');
+const moment =require('moment');
+const camClient = new CamSDK.Client({
+    mock: false,
+    // the following URL does not need authentication,
+    // but the tradeof is that some requests will fail
+    // e.g.: some filters use the reference to the user performing the request
+    apiUri: `${baseUrl}http://localhost:8082/engine-rest`
+  });
+
+const processDefinitionService  = new camClient.resource('process-definition');
+const processInstanceService    = new camClient.resource('process-instance');
+const filterService             = new camClient.resource('filter');
+const deploymentService         = new camClient.resource('deployment');
+const taskService        = new camClient.resource('task');
+const userService        = new camClient.resource('user');
+const variableService        = new camClient.resource('variable');
+
+
+
+
+
+const deployDir = __dirname + '/bpmn';
+
+
+const  thr=(err) =>{
+    if (err) {
+      throw err;
+    }
+  }
+
+  const toArray=(obj)=> {
+    var arr = [];
+    Object.keys(obj).forEach(function (key) {
+      arr.push(obj[key]);
+    });
+    return arr;
+  }
+// returns an array of functions reading the content of files.
+// To be used in CamSDK.utils.series()
+function readFiles(dirPath, filenames) {
+    return filenames.map(function (filename) {
+      return function (cb) {
+        fs.readFile(path.join(dirPath, filename), function (err, content) {
+          if (err) { return cb(err); }
+  
+          cb(null, {
+            name:    filename,
+            content: content.toString()
+          });
+        });
+      };
+    });
+  }
+  
+  
+ const  deployProcesses=(options)=> {
+     console.log("deployDir 2 --> ",deployDir);
+     
+    // get the files of the choosed direcory
+    fs.readdir(options.dirPath, function (err, dirFiles) {
+      thr(err);
+  
+      // store the path to be used as default value next time it's used
+    //   deployDir = options.dirPath;
+  
+      
+        // collect the content of the choosed files to be then uploaded
+        CamSDK.utils.series(readFiles(options.dirPath, ['perform_inspection_subprocess.bpmn','start_sub_process.bpmn','verify_jurisdiction_supprocess.bpmn']), function (err, files) {
+          thr(err);
+  
+          console.info(Object.keys(files).length + ' files will be deployed');
+          // create a deployment with...
+          deploymentService.create({
+            // ... the settings
+            deploymentName:           options.deploymentName,
+            enableDuplicateFiltering: options.enableDuplicateFiltering,
+            deployChangedOnly:        options.deployChangedOnly,
+            // ... and the files
+            files:                    toArray(files)
+          }, function (err, deployment) {
+            thr(err);
+  
+            console.log('deployment "' + deployment.name + '" succeeded, ' + deployment.deploymentTime);
+          });
+        });
+    
+    });
+  }
+  
+
+  const updateVariable=(processInstanceVariableId,variable)=>{    
+    processInstanceService.setVariable(processInstanceVariableId,variable,()=>{
+        // res.status(200).json({responce:"success"});
+    })
+}
 
 signToken = user => {
   return JWT.sign({
@@ -17,6 +120,20 @@ signToken = user => {
 }
 
 module.exports = {  
+
+  getTaskComments:(req,res,next)=>{
+      
+     console.log("req.params",req.query.taskId);
+     
+       const {taskId} = req.query;
+       console.log("taskId",taskId);
+       taskService.comments(taskId,(err,data)=>{
+        if(err)
+           res.status(500).json({err:err});
+        else
+          res.status(200).json({comments:data})
+       });
+  },
     saveTask: async (req, res, next) => {
       const {name,isComplete } = req.body;
      console.log("in save task post controller");
@@ -43,6 +160,15 @@ module.exports = {
       // const token = signToken(newUser);
       // Respond with token
       res.json(tsk);
+    },
+    completeTask:(req,res)=>{
+      const {taskId,variables}=req.body;
+        taskService.complete({id:taskId,variables:variables},(err,data)=>{
+        if(err)
+           res.status(404).json({err:err});
+        else
+           res.status(200).json(data);
+        })
     },
     updateTask: async (req, res, next) => {
       const id=req.params.id;
@@ -72,19 +198,29 @@ module.exports = {
      
         
     },
-    deleteTask: async (req, res, next) => {
-      const id=req.params.id;
-     console.log("in Delete task post controller and id is : ",id);
-     
-      
-     Tasks.findByIdAndRemove({id:id},(err,task)=>{
+    sheduleTaskCompletionForm: async (req, res, next) => {
+      const {taskId,schDateFrom,schTimeFrom,schDateTo,schTimeTo}=req.body;
+     console.log("in sheduleTaskCompletionForm task post controller and id is : ",taskId);
+     taskService.complete({id:taskId,variables:{taskId:{value:taskId},schDateFrom:{value:taskId},schDateTo:{value:schDateTo},schTimeFrom:{value:schTimeFrom},schTimeTo:{value:schTimeTo}}},(err,results)=>{
        if(err)
-        res.send('record deleted')
-        else
-        res.status(200);
-     })
+         res.status(500).json({err:err});
+       else
+         res.status(200).json({status:"Task completed successfuly"})
+     });
         
     },
+    addTaskNote: async (req, res, next) => {
+      const {taskId,note}=req.body;
+     console.log("in addtask task post controller and id is : ",taskId);
+     taskService.createComment(taskId,note,(err,results)=>{
+       if(err)
+         res.status(500).json({err:err});
+       else
+         res.status(200).json({status:"Task note added successfuly"})
+     });
+        
+    }
+    ,
   task: async (req,res,next)=>{
 //  console.log("<--user ID--->",req.user.id);
 //     const usr = await User.findById(req.user.id);
@@ -92,7 +228,7 @@ module.exports = {
 //     const username=usernameArray[0];
 // console.log("<--user Email--->",username);
 //     const url =
-//     "http://localhost:8080/engine-rest/task?assignee="+username;
+//     "${baseUrl}/engine-rest/task?assignee="+username;
   // fetch(url)
   //   .then(response => {
   //     response.json().then(json => {

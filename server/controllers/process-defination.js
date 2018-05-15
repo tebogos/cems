@@ -1,3 +1,4 @@
+const fetch = require('node-fetch');
 const CamSDK = require('camunda-bpm-sdk-js');
 
 var fs = require('fs');
@@ -5,12 +6,16 @@ var path = require('path');
 var inquirer = require('inquirer');
 var Table = require('cli-table');
 const moment =require('moment');
+var FormData = require('form-data');
+const {baseUrl} = require('../base-url');
+
+
 const camClient = new CamSDK.Client({
     mock: false,
     // the following URL does not need authentication,
     // but the tradeof is that some requests will fail
     // e.g.: some filters use the reference to the user performing the request
-    apiUri: 'http://localhost:8082/engine-rest'
+    apiUri: `${baseUrl}/engine-rest`
   });
 
 const processDefinitionService  = new camClient.resource('process-definition');
@@ -100,6 +105,21 @@ function readFiles(dirPath, filenames) {
     })
 }
 
+const postTaskAttachments=(attachments,taskId)=>{
+    var form = new FormData();
+    attachments.map(field=>{
+        form.append('attachment-name', field.name);
+        form.append('attachment-description', field.description);
+        form.append('attachment-type', field.type);
+        form.append('url', field.url);
+    });   
+
+    form.submit('http:8082//engine-rest/task/taskId/attachment/creat', function(err, res) {
+// res – response object (http.IncomingMessage)  //
+res.resume();
+});
+}
+
   module.exports = {
     deployProcesses:(req, res, next)=>{
         console.log("deployDir 2 --> ",deployDir);
@@ -134,10 +154,26 @@ function readFiles(dirPath, filenames) {
      const businessKey=zone+"-"+moment().year()+"-"+moment().month()+"-"+
      moment().day()+"-"+moment().hour()+"-"+moment().minute()+"-"+moment().second();
      console.log("businessKey...",businessKey);
-        // start the choosed process definition
-        processDefinitionService.submitForm({
-            id:processId,
-            variables:{
+     let variables={}
+     
+     if(req.body.attachments){
+        variables={
+            firstAssignee:{value:"",type:"String"},
+            requetorId:{value:requetorId,type:"String"},
+            workType:{value:workType,type:"String"},
+            zone:{value:zone,type:"String"},
+            region:{value:region,type:"String"},
+            firms:{value:firms,type:"String"},
+            notes:{value:notes,type:"String"},
+            firmFound:{value:true,type:"boolean"},
+            businessKey:{value:businessKey,type:"String"},
+            attachmentName:{value:req.body.attachments.name,type:"String"},
+            attachmentDescription:{value:req.body.attachments.description,type:"String"},
+            attachmentType:{value:req.body.attachments.type,type:"String"},
+        }
+     }
+     else{
+        variables={
             firstAssignee:{value:"",type:"String"},
             requetorId:{value:requetorId,type:"String"},
             workType:{value:workType,type:"String"},
@@ -147,7 +183,14 @@ function readFiles(dirPath, filenames) {
             notes:{value:notes,type:"String"},
             firmFound:{value:true,type:"boolean"},
             businessKey:{value:businessKey,type:"String"}
-        },
+        }
+     }
+
+      
+        // start the choosed process definition
+        processDefinitionService.submitForm({
+            id:processId,
+            variables:variables,
             businessKey:businessKey
           }, function (err) {
             thr(err);
@@ -157,9 +200,14 @@ function readFiles(dirPath, filenames) {
           });
     },
     getUnassignedTasks:async (req,res)=>{
-        const {processDefinitionName}=req.body;
+        console.log("req.query",req.query);
+        
+        const {region}=req.query;
+        console.log("region",region);
+        
+        const regQuery="region_eq_"+region
         let tasks;
-      await  taskService.list({unassigned:true,processDefinitionNameLike:processDefinitionName},
+      await  taskService.list({unassigned:true,processVariables:regQuery},
     (err,data)=>{
         if(err){
             res.status(403).json({ error: 'err'});
@@ -170,8 +218,10 @@ function readFiles(dirPath, filenames) {
         }
     });
     
+    console.log("task 0000---111 ",tasks);
+    if(tasks._embedded.task.length>0){
+      const processInstanceId=tasks._embedded.task[0].processInstanceId;
     
-    const processInstanceId=tasks._embedded.task[0].processInstanceId;
     console.log("task 0000---111 ",processInstanceId);
     variableService.instances({processInstanceIdIn:[processInstanceId]},
         (err,data)=>{
@@ -179,28 +229,52 @@ function readFiles(dirPath, filenames) {
                 res.status(403).json({ error: 'err'});
             }
             else{
-                res.json({tasks:tasks,variables:data});
+                res.status(200).json({tasks:tasks,variables:data});
                  
             }
         });
+    }
+    else{
+        console.log("task suppose not to be found ",tasks._embedded.task);
+        res.status(204).json({status:"Tasks not found"})
+    }
     },
-    getMyTasks:(req,res)=>{
+    getMyTasks:async(req,res)=>{
         // const {processDefinitionName}=req.body;
-        console.log("userId in ---000---000---",req.params.id);
-        const userId= req.params.id;
+        console.log("userId in ---000---000---",req.query.userId);
+        const userId= req.query.userId;
         console.log("userId in ---000---000---",userId);
         let tasks;
         
-        taskService.list({assignee:userId,active:"true"},
-    (err,data)=>{
-        if(err){
-            res.status(403).json({ error: 'err'});
-        }
+        await taskService.list({assignee:userId,active:"true"},
+        (err,data)=>{
+            if(err){
+                res.status(403).json({ error: 'err'});
+            }
+            else{
+                // res.json(data);
+                 tasks=data;
+            }
+        });
+        
+        if(tasks._embedded.task.length>0){
+            const processInstanceId=tasks._embedded.task[0].processInstanceId;
+            console.log("task 0000---111 ",processInstanceId);
+            variableService.instances({processInstanceIdIn:[processInstanceId]},
+                (err,data)=>{
+                    if(err){
+                        res.status(403).json({ error: 'err'});
+                    }
+                    else{
+                        res.json({tasks:tasks,variables:data});
+                        
+                    }
+                });
+            }
         else{
-            res.json(data);
-            tasks=data;
+            console.log("task suppose not to be found ",tasks._embedded.task);
+                res.status(204).json({status:"Tasks not found"})
         }
-    })
     },
     assignTaskToUser:(req,res)=>{
         const {taskId,userId} = req.body;
@@ -228,15 +302,7 @@ function readFiles(dirPath, filenames) {
         }
     )   
     },
-    completeTask:(req,res)=>{
-      const {taskId,variables}=req.body;
-        taskService.complete({id:taskId,variables:variables},(err,data)=>{
-        if(err)
-           res.status(404).json({err:err});
-        else
-           res.status(200).json(data);
-        })
-    },
+   
     getTasksByVariable:(req,res)=>{
         const {processInstanceBusinessKey,taskVariables}=req.body;
         taskService.list({processInstanceBusinessKey:processInstanceBusinessKey,taskVariables:taskVariables},
@@ -266,6 +332,10 @@ function readFiles(dirPath, filenames) {
         processInstanceService.setVariable(processInstanceVariableId,variable,()=>{
             res.status(200).json({responce:"success"});
         })
+    },
+    getProcessDiagram:(req,res)=>{
+
+
     }
     
 }

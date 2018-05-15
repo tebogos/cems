@@ -19,23 +19,26 @@ const initState = {
   processDefinitionId:"",
   processInstanceId:"",
   taskDefinitionKey:"",
-  businessKey:""
+  businessKey:"",
+  comments:[]
   },
+  
   currenttask: ''
 }
 
 
 
 export const TASK_ADD = 'TASK_ADD'
-export const TASKS_LOAD = 'TASKS_LOAD'
+export const LOAD_TASKS = 'LOAD_TASKS'
 const CURRENT_UPDATE = 'CURRENT_UPDATE'
 export const TASK_REPLACE = 'TASK_REPLACE'
 export const TASK_REMOVE = 'TASK_REMOVE';
 export const LOAD_PROCESS_USERS = 'LOAD_PROCESS_USERS';
 export const UPDATE_SELECTED_TASK='UPDATE_SELECTED_TASK';
+export const LOAD_TASK_COMMETS='LOAD_TASK_COMMETS';
 
 export const updateCurrent = (val) => ({type:CURRENT_UPDATE, payload: val});
-export const loadTasks = (tasks) => ({type: TASKS_LOAD, payload: tasks});
+export const loadTasks = (tasks) => ({type: LOAD_TASKS, payload: tasks});
 export const loadProcessUsers = (users) => ({type: LOAD_PROCESS_USERS, payload: users})
 export const addTask = (task) => ({type: TASK_ADD, payload: task})
 export const replaceTask = (task) => ({type: task_REPLACE, payload: task })
@@ -122,6 +125,8 @@ export const fetchTasks = () => {
 }
 
 export const changeSelectedTask=(taskId)=>{
+  console.log("Update selected task ",taskId);
+  
   return (dispatch)=>{
     dispatch(updateSelectedTask(taskId))
   }
@@ -205,11 +210,16 @@ export const getVisibleTasks = (tasks, filter) => {
   }
 }
 
+const loadTaskComments=(state,action)=>{
+  const selectedTask=state.selectedTask;
+  const selectedTaskWithComments={...selectedTask,comments:action.payload};
+  return {...state,selectedTask:selectedTaskWithComments};
+}
 export default (state = initState, action) => {
   switch (action.type) {
     case TASK_ADD:
       return {...state, currentTask: '', tasks: state.tasks.concat(action.payload)}
-    case TASKS_LOAD:
+    case LOAD_TASKS:
       return {...state, tasks: action.payload}
     case CURRENT_UPDATE:
       return {...state, currentTask: action.payload}
@@ -226,6 +236,8 @@ export default (state = initState, action) => {
     return {...state,userList:action.payload}
     case UPDATE_SELECTED_TASK:
     return {...state,selectedTask:action.payload}
+    case LOAD_TASK_COMMETS:
+    return  loadTaskComments(state,action);
     default:
       return state
   }

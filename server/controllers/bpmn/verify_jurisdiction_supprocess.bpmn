@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.10.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.13.1">
   <bpmn:collaboration id="Collaboration_01wqi3d">
+    <bpmn:extensionElements>
+      <camunda:properties>
+        <camunda:property name="description" value="veryfy_durisdiction_subprocess_verify_jurisdiction_task" />
+      </camunda:properties>
+    </bpmn:extensionElements>
     <bpmn:participant id="verify_duriscriction_subprocess_id" name="Verify Jurisdiction Subprocess" processRef="verify_duriscriction_subprocess" />
   </bpmn:collaboration>
   <bpmn:process id="verify_duriscriction_subprocess" name="Verify Jurisdiction Subprocess" isExecutable="true">
@@ -21,6 +26,18 @@
       <bpmn:outgoing>SequenceFlow_1iz4sec</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:userTask id="UserTask_0ya5xim" name="Verify Jurisdiction" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(5).toDate()}">
+      <bpmn:documentation>veryfy_durisdiction_subprocess_very_durisdiction_task</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="description" value="Jurisdiction" />
+        </camunda:properties>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="taskDateFrom">${dateFrom}</camunda:inputParameter>
+          <camunda:inputParameter name="taskTimeFrom">${timeFrom}</camunda:inputParameter>
+          <camunda:inputParameter name="taskDateTo">${dateTo}</camunda:inputParameter>
+          <camunda:inputParameter name="taksTimeTo">${timeTo}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0b9sh5w</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_07feycx</bpmn:outgoing>
     </bpmn:userTask>
@@ -32,7 +49,25 @@
     <bpmn:endEvent id="EndEvent_1n0t4mu" name="End Verification">
       <bpmn:incoming>SequenceFlow_095z878</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="UserTask_0i10mxr" name="Schedule verification" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(3).toDate()}">
+    <bpmn:userTask id="UserTask_0i10mxr" name="Schedule verification" camunda:formKey="schedule_task_form" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(3).toDate()}">
+      <bpmn:documentation>veryfy_durisdiction_subprocess_schedule_verification_task</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="dateFrom">${schDateFrom}</camunda:outputParameter>
+          <camunda:outputParameter name="timeFrom">${schTimeFrom}</camunda:outputParameter>
+          <camunda:outputParameter name="dateTo">${schDateTo}</camunda:outputParameter>
+          <camunda:outputParameter name="timeTo">${schTimeTo}</camunda:outputParameter>
+        </camunda:inputOutput>
+        <camunda:formData>
+          <camunda:formField id="dateFrom" label="dateFrom" type="date" defaultValue="${dateTime().plusDays(1).toDate()}" />
+          <camunda:formField id="timeFrom" label="timeFrom" type="date" defaultValue="0000" />
+          <camunda:formField id="dateTo" label="Date To" type="date" defaultValue="${dateTime().plusDays(3).toDate()}" />
+          <camunda:formField id="timeTo" label="Time To" type="date" defaultValue="${dateTime().plusDays(3).toDate()}" />
+        </camunda:formData>
+        <camunda:properties>
+          <camunda:property name="description" value="veryfy_durisdiction_subprocess_schedule_verification_task" />
+        </camunda:properties>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1iz4sec</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0b9sh5w</bpmn:outgoing>
     </bpmn:userTask>
@@ -50,6 +85,12 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_004pe7y" sourceRef="UserTask_16fkhdu" targetRef="EndEvent_1sb26w3" />
     <bpmn:userTask id="UserTask_16fkhdu" name="Register Firm" camunda:assignee="${firstAssignee}" camunda:dueDate="${dateTime().plusDays(6).toDate()}">
+      <bpmn:documentation>veryfy_durisdiction_subprocess_register_firm_task</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="description" value="veryfy_durisdiction_subprocess_register_firm_task" />
+        </camunda:properties>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_158ceq4</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_004pe7y</bpmn:outgoing>
     </bpmn:userTask>
@@ -93,46 +134,46 @@
         <dc:Bounds x="459" y="314" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1iz4sec_di" bpmnElement="SequenceFlow_1iz4sec">
-        <di:waypoint xsi:type="dc:Point" x="20" y="96" />
-        <di:waypoint xsi:type="dc:Point" x="40" y="96" />
+        <di:waypoint x="20" y="96" />
+        <di:waypoint x="40" y="96" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="-15" y="75" width="0" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0b9sh5w_di" bpmnElement="SequenceFlow_0b9sh5w">
-        <di:waypoint xsi:type="dc:Point" x="140" y="96" />
-        <di:waypoint xsi:type="dc:Point" x="166" y="96" />
+        <di:waypoint x="140" y="96" />
+        <di:waypoint x="166" y="96" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="108" y="75" width="0" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_07feycx_di" bpmnElement="SequenceFlow_07feycx">
-        <di:waypoint xsi:type="dc:Point" x="266" y="96" />
-        <di:waypoint xsi:type="dc:Point" x="326" y="96" />
+        <di:waypoint x="266" y="96" />
+        <di:waypoint x="326" y="96" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="251" y="75" width="0" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_095z878_di" bpmnElement="SequenceFlow_095z878">
-        <di:waypoint xsi:type="dc:Point" x="351" y="121" />
-        <di:waypoint xsi:type="dc:Point" x="351" y="158" />
+        <di:waypoint x="351" y="121" />
+        <di:waypoint x="351" y="158" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="344" y="134.5" width="48" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_158ceq4_di" bpmnElement="SequenceFlow_158ceq4">
-        <di:waypoint xsi:type="dc:Point" x="376" y="96" />
-        <di:waypoint xsi:type="dc:Point" x="376" y="354" />
-        <di:waypoint xsi:type="dc:Point" x="459" y="354" />
+        <di:waypoint x="376" y="96" />
+        <di:waypoint x="376" y="354" />
+        <di:waypoint x="459" y="354" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="385.1794871794872" y="344" width="54" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_004pe7y_di" bpmnElement="SequenceFlow_004pe7y">
-        <di:waypoint xsi:type="dc:Point" x="559" y="354" />
-        <di:waypoint xsi:type="dc:Point" x="575" y="354" />
-        <di:waypoint xsi:type="dc:Point" x="575" y="96" />
-        <di:waypoint xsi:type="dc:Point" x="590" y="96" />
+        <di:waypoint x="559" y="354" />
+        <di:waypoint x="575" y="354" />
+        <di:waypoint x="575" y="96" />
+        <di:waypoint x="590" y="96" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="590" y="219" width="0" height="12" />
         </bpmndi:BPMNLabel>

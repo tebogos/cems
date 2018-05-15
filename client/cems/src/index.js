@@ -26,13 +26,17 @@ import Register from './views/Pages/Register/'
 import Page404 from './views/Pages/Page404/'
 import Page500 from './views/Pages/Page500/';
 import jwtDecode from 'jwt-decode';
-import createHistory from 'history/createBrowserHistory'
+import createHistory from 'history/createBrowserHistory';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+const muiTheme = getMuiTheme({});
 
-import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
+import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux';
+import { rootSaga } from "./saga/rootSaga";
 
 const history = createHistory();
 
-const { store, persistor } =reduxStore();
+const { store, persistor,sagaMiddleware } =reduxStore();
 // let expired=false;
 // console.log("in index check store -->||--> ",store);
 
@@ -54,11 +58,15 @@ const { store, persistor } =reduxStore();
 // }
 // 1522126199359
 
+console.log("We are in root now")
 
+
+sagaMiddleware.run(rootSaga);
 ReactDOM.render((
  
      <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+     <MuiThemeProvider muiTheme={muiTheme} >      
       <ConnectedRouter history={history}>
         <Switch>
          {/* <Route exact path="/login" name="Login Page" component={Login}/> */}
@@ -68,6 +76,7 @@ ReactDOM.render((
          <Route path="/" name="Home" component={Full}/>
         </Switch>
         </ConnectedRouter>
+        </MuiThemeProvider>        
       </PersistGate>
     </Provider>
 ), document.getElementById('root'));

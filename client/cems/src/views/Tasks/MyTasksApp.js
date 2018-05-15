@@ -27,7 +27,7 @@ console.log("tokenDecoded --> ",tokenDecoded);
 console.log("tokenExpeirym --> ",tokenExpeiry);
 console.log("Date time now --> ",(new Date().getTime()))
 console.log("tokenExpeiry-86300000 --> ",(tokenExpeiry-86300000));
- expired = (tokenExpeiry-86300000)<(new Date().getTime());
+ expired = (tokenExpeiry)<(new Date().getTime());
 console.log("expired --> ",expired);
 if(expired){
   console.log("loggin ou now");
@@ -47,14 +47,10 @@ if(expired){
                 My Tasks
               </CardHeader>
               <CardBody>
-            <MaterialUIAutocomplete />
-              <Message />
-   {/* <TaskForm /> */}
    
    <Route path='/:filter?' render={({match}) => (
        <MyTasks filter={match.params.filter} />
      )} />
-   {/* <Footer /> */}
   
  
               </CardBody>

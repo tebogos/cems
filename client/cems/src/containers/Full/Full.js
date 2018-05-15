@@ -63,16 +63,47 @@ import Modals from '../../views/Notifications/Modals/';
 
 import jwtDecode from 'jwt-decode';
 import {loginAction,logoutAction} from '../../reducers/login';
+import Snackbar from 'material-ui/Snackbar';
+
 
 class Full extends Component {
   
+  constructor(props){
+    super(props)
+    this.state = {
+      assign:false,
+      open:false,
+      message:"",
+      messageInitiated:false
+    };
 
+    this.handleRequestClose=this.handleRequestClose.bind(this);
+  }
+
+  handleRequestClose(){
+    this.setState({
+      open: false,
+    });
+  }
+  componentWillReceiveProps(nextProp){
+   console.log("next props <<<---->>> ",nextProp);
+   
+    if(nextProp){
+     if(nextProp.message){
+        this.setState({
+          open: true,
+          message:nextProp.message         
+        }); 
+        this.props.resetMessage();
+      }
+    }
+  }
   
   componentDidMount() {
    
 
 let expired=false;
-console.log("in Full componentDidMount -- ");
+console.log("in Full componentDidMount -- process.env.NODE_ENV ",process.env.NODE_ENV);
 
 if(window.localStorage.getItem('token')){
 
@@ -96,7 +127,8 @@ if(expired){
   }
 
   render() {
-    console.log(" this.props.role --> ||--> ",this.props.role.includes("senior-agent"));
+    console.log(" this.props.role --> ||--> |||||| ",process.env.NODE_ENV);
+    console.log("in Full componentDidMount -- process.env.NODE_ENV ",process.env.NODE_ENV);
     
     return (
       <div className="app">
@@ -145,6 +177,12 @@ if(expired){
                 <Route path="/charts" name="Charts" component={Charts}/>                
                 <Redirect from="/" to="/dashboard"/>
               </Switch>
+              <Snackbar
+ open={this.state.open}
+ message={this.state.message}
+ autoHideDuration={4000}
+ onRequestClose={this.handleRequestClose}
+/>
             </Container>
           </main>
           <Aside/>
@@ -156,7 +194,17 @@ if(expired){
 }
 
 
+const mapDispatchToProps = dispatch => {
+   
+  return {
+    loginAction: (login) => dispatch({ type: "GET_TASK_COMMETS" ,payload:{authenticated:login}}),
+    logoutAction: (login) => dispatch({ type: "GET_MY_TASKS",payload:{authenticated:login} }),
+    resetMessage:()=>dispatch({type:"RESET_MESSAGE"}),
 
+  };
+  
+};
 export default withRouter( connect((state) => ({authenticated: state.login.authenticated,
-  redirectUrl: state.login.redirectUrl,role:state.login.role}),{loginAction,logoutAction}
+  redirectUrl: state.login.redirectUrl,role:state.login.role,
+message:state.message}),mapDispatchToProps
 )(Full))

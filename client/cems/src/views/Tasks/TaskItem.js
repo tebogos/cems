@@ -38,7 +38,8 @@ class TaskItem extends React.Component{
         processDefinitionId:this.props.processDefinitionId,
         processInstanceId:this.props.processInstanceId,     
         taskDefinitionKey:this.props.taskDefinitionKey,
-        businessKey:this.props.businessKey
+        businessKey:this.props.businessKey,
+        comments:[]
         }
      )}>{this.props.name}</a></span>
       </ListGroupItem>

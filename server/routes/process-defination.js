@@ -16,7 +16,7 @@ router.route('/start-selected-process')
 
 router.route('/get-unassigned-tasks')
 .get(ProcessDefinationController.getUnassignedTasks);
-router.route('/get-my-tasks/:id')
+router.route('/get-my-tasks')
 .get(ProcessDefinationController.getMyTasks);
 
 router.route('/get-all-users')
@@ -27,9 +27,6 @@ router.route('/assign-task-to-user')
 
 router.route('/assign-first-task-to-user')
 .post(ProcessDefinationController.assignFirstTaskToUser);
-
-router.route('/complete-task')
-.post(ProcessDefinationController.completeTask);
 
 router.route('/get-task-by-variable')
 .post(ProcessDefinationController.getTasksByVariable);

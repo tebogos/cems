@@ -1,5 +1,13 @@
-export const postProcessForm = (form) => {
-    return fetch('http://localhost:8081/process-defination/start-selected-process', {
+import {baseUrl} from '../../baseUrl';
+// let baseUrl="";
+// if(process.env.NODE_ENV === 'production')
+//    baseUrl = process.env.REACT_APP_PROD_BASE_URL
+// else
+  // const  baseUrl = process.env.REACT_APP_BASE_URL
+
+
+export const postProcessForm = (form,showMessage) => {
+    return fetch(`${baseUrl}/process-defination/start-selected-process`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -7,6 +15,6 @@ export const postProcessForm = (form) => {
       },
       body: JSON.stringify(form)
     })
-      .then(res => res.json())
+      .then(res =>showMessage("Form added successfuly")||res.json())
   }
   

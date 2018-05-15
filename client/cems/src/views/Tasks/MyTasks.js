@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {changeSelectedTask,getAllProcessUser,fetchMyTasks, toggleTask, deleteTask, getVisibleTasks,completTask} from '../../reducers/task';
+import {getAllProcessUser,getVisibleTasks} from '../../reducers/task';
 import {ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText,
   Badge
 } from 'reactstrap';
@@ -20,6 +20,8 @@ class MyTasks extends Component {
     this.hideDetails=this.hideDetails.bind(this);
   }
   showDetails(task){
+    console.log("In showDetails function...",task);
+    
     this.props.changeSelectedTask(task)
     this.setState({showDetails:true})
   }
@@ -27,8 +29,10 @@ class MyTasks extends Component {
     this.setState({showDetails:false})
   }
   componentDidMount() {
-    this.props.fetchMyTasks(this.props.userId);
-      this.props.getAllProcessUser();
+    console.log("userID from componentsdidmount getMyTask",this.props);
+    
+    this.props.getMyTasks(this.props.userId);
+      this.props.getAllProcessUsers();
   }
 
   render() {
@@ -54,9 +58,19 @@ class MyTasks extends Component {
     )
   }
 }
+const mapDispatchToProps = dispatch => {
+   
+  return {
+    getComments: (taskId) => dispatch({ type: "GET_TASK_COMMETS" ,payload:taskId}),
+    getMyTasks: (userId) => dispatch({ type: "GET_MY_TASKS",payload:userId }),
+    getAllProcessUsers:()=>dispatch({type:"GET_ALL_PROCESS_USERS"}),
+    changeSelectedTask:(task)=>dispatch({type:"UPDATE_SELECTED_TASK",payload:task})
 
+  };
+  
+};
 export default connect(
   (state, ownProps) => ({tasks: getVisibleTasks(state.task.tasks, ownProps.filter)
-  ,userId:state.login.userId}),
-  {fetchMyTasks, toggleTask, deleteTask,completTask,getAllProcessUser,changeSelectedTask}
+  ,userId:state.login.username}),
+  mapDispatchToProps
 )(MyTasks)

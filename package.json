@@ -23,6 +23,7 @@
     "express": "^4.15.3",
     "express-fileupload": "^0.4.0",
     "express-promise-router": "^2.0.0",
+    "form-data": "^2.3.2",
     "helmet": "^3.12.0",
     "inquirer": "^5.2.0",
     "joi": "^10.6.0",

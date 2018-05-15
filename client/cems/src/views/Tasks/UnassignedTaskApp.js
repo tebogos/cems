@@ -12,6 +12,8 @@ import {connect} from 'react-redux';
 
 class UnassignedTaskApp extends Component {
 
+ 
+  
   componentDidMount()
  {
     let expired=false;
@@ -26,7 +28,7 @@ console.log("tokenDecoded --> ",tokenDecoded);
 console.log("tokenExpeirym --> ",tokenExpeiry);
 console.log("Date time now --> ",(new Date().getTime()))
 console.log("tokenExpeiry-86300000 --> ",(tokenExpeiry-86300000));
- expired = (tokenExpeiry-86300000)<(new Date().getTime());
+ expired = tokenExpeiry<(new Date().getTime());
 console.log("expired --> ",expired);
 if(expired){
   console.log("loggin ou now");
@@ -56,14 +58,20 @@ if(expired){
   
  
               </CardBody>
+            
             </Card>
  </div>
+ 
 </Router>
-
+ 
     )
 }
 }
 
 
-export default withRouter( connect((state) => ({authenticated: state.login.authenticated,redirectUrl: state.login.redirectUrl}),{loginAction,logoutAction}
+export default withRouter( connect((state) => ({authenticated: state.login.authenticated,redirectUrl: 
+  state.login.redirectUrl,message:state.message,selectedTask:state.task.selectedTask}),{loginAction,logoutAction}
 )(UnassignedTaskApp))
+
+
+

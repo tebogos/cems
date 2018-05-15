@@ -34,6 +34,9 @@ const userSchema = new Schema({
       type: [String],
 
     },
+    region: {
+      type: String
+    },
     manager: {
       type: String
     },

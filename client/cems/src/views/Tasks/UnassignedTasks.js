@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {changeSelectedTask,getAllProcessUser,fetchTasks, toggleTask, deleteTask, getVisibleTasks,completTask} from '../../reducers/task';
+import {getAllProcessUser,getVisibleTasks} from '../../reducers/task';
 import {ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText,
   Badge
 } from 'reactstrap';
@@ -20,6 +20,8 @@ class UnassignedTasks extends Component {
     this.hideDetails=this.hideDetails.bind(this);
   }
   showDetails(task){
+    console.log("In showDetails function...",task);
+    
     this.props.changeSelectedTask(task)
     this.setState({showDetails:true})
   }
@@ -27,12 +29,14 @@ class UnassignedTasks extends Component {
     this.setState({showDetails:false})
   }
   componentDidMount() {
-    this.props.fetchTasks();
-      this.props.getAllProcessUser();
+    console.log("userID from componentsdidmount getMyTask",this.props);
+    
+    this.props.getUnassignedTasks(this.props.region);
+      this.props.getAllProcessUsers();
   }
 
   render() {
-    console.log('UnassignedTasks prop -->',this.props.tasks);
+    console.log('MyTasks prop -->',this.props.tasks);
     
     return (
       <div className="Task-List">
@@ -54,8 +58,19 @@ class UnassignedTasks extends Component {
     )
   }
 }
+const mapDispatchToProps = dispatch => {
+   
+  return {
+    getComments: (taskId) => dispatch({ type: "GET_TASK_COMMETS" ,payload:taskId}),
+    getUnassignedTasks: (region) => dispatch({ type: "GET_UNASSIGNED_TASKS",payload:region }),
+    getAllProcessUsers:()=>dispatch({type:"GET_ALL_PROCESS_USERS"}),
+    changeSelectedTask:(task)=>dispatch({type:"UPDATE_SELECTED_TASK",payload:task})
 
+  };
+  
+};
 export default connect(
-  (state, ownProps) => ({tasks: getVisibleTasks(state.task.tasks, ownProps.filter)}),
-  {fetchTasks, toggleTask, deleteTask,completTask,getAllProcessUser,changeSelectedTask}
+  (state, ownProps) => ({tasks: getVisibleTasks(state.task.tasks, ownProps.filter)
+  ,userId:state.login.username,region:state.login.region}),
+  mapDispatchToProps
 )(UnassignedTasks)

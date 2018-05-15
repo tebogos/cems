@@ -9,6 +9,9 @@ import MenuItem from 'material-ui/MenuItem'
 import asyncValidate from './asyncValidate';
 import MaterialUIAutocomplete from '../../views/Tasks/MaterialUIAutocomplete';
 import { change } from 'redux-form';
+import DatePicker from 'material-ui/DatePicker';
+import moment from 'moment';
+
 
 const validate = values => {
   const errors = {}
@@ -108,6 +111,23 @@ const renderSelectField = ({
     {...custom}
   />
 )
+const renderDate = ({
+  input,
+  placeholder,
+   defaultValue,
+  label,
+  meta: { touched, error },
+  children,
+  ...custom
+}) => (
+  <DatePicker
+  floatingLabelText={label}
+  hintText={label}  
+  errorText={touched && error}
+   onChange={(event,date) => input.onChange(moment(date).format('YYYY-MM-DD'))}
+  />
+)
+
 
 
 const menuItems=(difinitions)=> {
@@ -154,6 +174,14 @@ class NewProcessForm extends React.Component{
           label="Process processId"
         >
                {menuItems(definitions.definitions)}     
+        </Field>
+     </div>
+     <div>
+        <Field
+          name="datefrom"
+          component={renderDate}
+          label="Date From"
+        >
         </Field>
      </div>
       <div>

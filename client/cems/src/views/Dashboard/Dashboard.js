@@ -440,6 +440,8 @@ class Dashboard extends Component {
   }
 
   render() {
+    console.log("we are in deshboad");
+    
 
     return (
       <div className="animated fadeIn">

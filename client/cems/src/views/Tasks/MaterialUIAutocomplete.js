@@ -13,7 +13,7 @@ import JSONP              from 'jsonp';
 
 const googleAutoSuggestURL = `
   //suggestqueries.google.com/complete/search?client=youtube&ds=yt&q=`;
-  // const googleAutoSuggestURL =`http://localhost:8081/firm/get-firm?firmName=`;
+  // const googleAutoSuggestURL =`${baseUrl}/firm/get-firm?firmName=`;
 
 
 class MaterialUIAutocomplete extends Component {

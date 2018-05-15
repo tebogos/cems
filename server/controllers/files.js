@@ -12,7 +12,7 @@ const storage = Storage({
 const bucket = storage.bucket(bucketName);
 module.exports = {  
 
-    upload:(req,res,next)=>{
+    upload:async(req,res,next)=>{
         console.log("I am in file upload server");
         
         if (!req.file) {
@@ -26,13 +26,13 @@ module.exports = {
           // Create a new blob in the bucket and upload the file data.
   const blob = bucket.file(req.file.originalname);
   
-  const blobStream = blob.createWriteStream();
+  const blobStream = blob.createWriteStream({public:true});
 
   
   blobStream.on('error', (err) => {
     next(err);
   });
-  blobStream.on('finish', () => {
+  await blobStream.on('finish', () => {
     // The public URL can be used to directly access the file via HTTP.
     const publicUrl = format(`https://storage.googleapis.com/siyandiza/${blob.name}`);
    console.log("publicURL -------......------",publicUrl);
@@ -40,7 +40,22 @@ module.exports = {
     res.status(200).send(publicUrl);
   });
 
-  blobStream.end(req.file.buffer);
+  await blobStream.end(req.file.buffer);
+
+// const makePublic=()=>{
+//   blob.makePublic()
+//   .then(() => {
+//     console.log(`gs://${bucketName}/${req.file.originalname} is now public.`);
+//   })
+//   .catch(err => {
+//     console.error('ERROR:', err);
+//   })
+// }
+
+//   setTimeout(
+//     makePublic
+//     ,20000)
+  
 
     }
 }

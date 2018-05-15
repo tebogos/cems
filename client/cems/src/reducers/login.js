@@ -10,6 +10,7 @@ const initState = {
   imageUrl:'',    
   redirectUrl:'/',
   authenticated:'no',
+  region:"",
   role:['']
 };
 
@@ -47,16 +48,17 @@ export const loginUser = (accessToken) => {
         const decoded = jwtDecode(user.token);
         console.log(decoded)
        window.localStorage.setItem("token",user.token);
-      //  window.location = "http://localhost:8080/#/dashboard";
+      //  window.location = "${baseUrl}/#/dashboard";
       //  dispatch(push('/dashboard'))
       // browserHistory.push('/dashboard')
-      // window.location.href = 'http://localhost:8080/#/dashboard';
+      // window.location.href = '${baseUrl}/#/dashboard';
       // dispatch(push('/dashboard'))
       // browserHistory.push('/dashboard')
       
+       console.log("we are logging here <<<<----->>>> region = ",user.region);
        
        dispatch(loginAction({authenticated:"yes"}));
-       dispatch(updateUserAction({username:user.usename,imageUrl:user.usename,role:user.role}));
+       dispatch(updateUserAction({username:user.usename,imageUrl:user.usename,role:user.role,region:user.region}));
       //  document.location.href='/Todo';
       });
   }
@@ -65,7 +67,7 @@ export const loginUser = (accessToken) => {
 
 
 
-const updateUser=(state,action)=>Object.assign({},state,{username:action.payload.username,imageUrl:action.payload.imageUrl,role:action.payload.role})
+const updateUser=(state,action)=>Object.assign({},state,action.payload)
 const logout =(state,action)=>Object.assign({},state,{authenticated:'no'})
 const login=(state,action)=>Object.assign({},state,{authenticated:'yes'})
 

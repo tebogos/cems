@@ -8,13 +8,13 @@ export default class DefaultUpload extends React.Component {
 
         this.djsConfig = {
             addRemoveLinks: true,
-            acceptedFiles: ".pdf/image/jpeg,image/png,image/gif"
+            acceptedFiles: "image/jpeg,image/png,image/gif,application/pdf"
         };
 
         this.componentConfig = {
             iconFiletypes: ['.jpg', '.png', '.gif','.pdf','.tiff'],
             showFiletypeIcon: false,
-            postUrl: 'http://localhost:8081/upload-handler'
+            postUrl: '${baseUrl}/upload-handler'
         };
 
         // If you want to attach multiple callbacks, simply
@@ -22,7 +22,7 @@ export default class DefaultUpload extends React.Component {
         this.callbackArray = [() => console.log('Hi!'), () => console.log('Ho!')];
 
         // Simple callbacks work too, of course
-        this.callback = () => console.log('Hello!');
+        this.callback = (file) => console.log('Hello!',file);
 
         this.success = file =>this.props.updateUrl(file);
 
@@ -44,7 +44,7 @@ export default class DefaultUpload extends React.Component {
             addedfile: this.callback,
             success: this.success,
             removedfile: this.removedfile,
-            uploadprogress: this.progress
+            uploadprogress: this.props.getProgress
         }
 
         return <DropzoneComponent config={config} eventHandlers={eventHandlers} djsConfig={djsConfig} />
